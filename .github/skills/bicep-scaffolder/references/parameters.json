@@ -1,0 +1,5 @@
+{
+  "shortAppName": "myapp",
+  "environment": "dev",
+  "storageSku": "Standard_LRS"
+}
