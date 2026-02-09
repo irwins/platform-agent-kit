@@ -92,29 +92,3 @@ Validate all bicep files in modules/storage/
 6. If still failing or unclear, capture `az bicep build --file <file> --debug` output and search upstream issues or open an issue with a minimal repro.
 
 **Tip:** Add a CI job that runs `az bicep build` and `az bicep build-params` for touched files so regressions are caught early.
-
----
-
-## Evaluation Scenarios (for model testing)
-Create the following minimal evaluations to verify the Skill's behavior across models (Haiku, Sonnet, Opus):
-
-1. **Valid Bicep module - basic pass**
-   - Files: `test/eval/valid/main.bicep`
-   - Query: "Validate `test/eval/valid/main.bicep`"
-   - Expected behavior: `az bicep build` succeeds (exit 0); Skill returns "validation passed" and no errors.
-
-2. **Parameter mismatch - clear error**
-   - Files: `test/eval/mismatch/main.bicep` + `test/eval/mismatch/params.bicepparam` (params reference undefined parameter)
-   - Query: "Validate parameter file `test/eval/mismatch/params.bicepparam` against `main.bicep`"
-   - Expected behavior: `az bicep build-params` or `az bicep build` fails with `BCP033` or similar; Skill reports the BCP code and triage step to fix it.
-
-3. **Linter warning - deprecated API**
-   - Files: `test/eval/warning/module.bicep` (uses a deprecated API or triggerable linter rule)
-   - Query: "Validate `test/eval/warning/module.bicep`"
-   - Expected behavior: `az bicep build` succeeds but returns linter warnings; Skill includes the warning code and suggests remediation or `bicepconfig.json` changes.
-
-Notes:
-- Run each evaluation with different models (Haiku/Sonnet/Opus) to ensure the Skill's instructions are robust across capacity/precision levels.
-- Each evaluation should assert: exit code behavior, presence of BCP codes or warnings, and that the Skill returns a clear triage step.
-- Include minimal sample files in `test/eval/...` or run the evaluation against hand-crafted examples locally.
-

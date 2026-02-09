@@ -3,22 +3,21 @@ name: "azure-verified-modules"
 description: "Recommend and reference Azure Verified Modules (AVMs) for common Azure resource patterns. Use when a user asks whether to reimplement or customize core resources (Key Vault, Storage, Log Analytics) or when weighing trade-offs between reuse vs custom code; keywords: azure verified modules, AVM, modules, reuse, keyvault, storage, loganalytics, compliance, region"
 ---
 
-# Azure Verified Modules Skill
+# Azure Verified Modules (AVM) Skill
 
-Summary: Recommend Azure Verified Modules (AVMs) and provide concise, actionable guidance for choosing reuse vs custom implementations.
+Summary: Enforce **AVM-First** policy. Azure Verified Modules are the mandatory default for all common infrastructure patterns in this repository.
+
+Decision Rules:
+1. **Mandatory Use**: You MUST use an AVM if a pattern exists in the [AVM Index](https://azure.github.io/Azure-Verified-Modules/).
+2. **Rejection Criteria**: A custom module is ONLY permitted if:
+   - No AVM equivalent exists.
+   - The AVM version is currently broken (documented bug).
+   - Enterprise-specific sovereignty or security overrides cannot be achieved via AVM parameters.
+3. **Justification**: If rejection criteria are met, the agent MUST write a "Justification for Custom Module" in the resulting code's README.
 
 Usage:
-- Inputs: requested resource pattern, required features, compliance or region constraints, and architecture intent
-- Outputs: a recommended AVM (name + pinned version), rationale, trade-offs, and implementation notes
-
-Decision checklist (simple decision tree):
-1. Default: **Use an AVM** if it supports the required features, target region, and compliance constraints.
-2. Consider a custom implementation if **any** of the following apply:
-   - The AVM lacks required feature(s) (list them explicitly)
-   - A regulatory or compliance requirement forbids AVM defaults or requires a specific control
-   - Performance/latency requirements cannot be satisfied by the AVM
-   - You need a provider- or tenant-specific feature that AVM does not expose
-3. If you choose custom, prefer contributing back or wrapping the AVM rather than duplicating logic.
+- Reference AVMs using the `br/avm` or `br/public` aliases defined in `bicepconfig.json`.
+- Pin to specific versions (e.g., `0.5.1`). NEVER use `latest`.
 
 Trade-offs (short):
 - AVMs: upstream maintenance, security patches, standard conventions, faster time-to-deploy
